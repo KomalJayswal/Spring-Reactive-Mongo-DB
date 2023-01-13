@@ -1,7 +1,5 @@
 # Spring Reactive Mongo DB
 
-This is a utility tool which can be used in other services for **handling the user-defined or custom exceptions for both checked and unchecked exceptions**
-
 ## Problem Statement
 
 Create spring reactive CRUD Operations with Mongo Database.
