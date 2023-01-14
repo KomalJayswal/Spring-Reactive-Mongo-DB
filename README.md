@@ -63,3 +63,6 @@ curl --location --request DELETE 'http://localhost:8080/products/{id}' \
 2. GET Product using incorrect product ID
 3. GET Product whose prize range product is not present in DB
 4. Update a Product whose product ID is not present in Database
+5. Start the application, and then stop the Mongo DB, default mongodb timeout is around 
+60 secs , but we have added the configuration to reduce the timeout to 10 secs along with
+an error response
