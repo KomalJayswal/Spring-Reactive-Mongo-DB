@@ -58,7 +58,7 @@ curl --location --request DELETE 'http://localhost:8080/products/{id}' \
 --header 'Content-Type: application/json'
 ```
 
-### Error CURL Commands
+### Error Cases
 1. GET All Product when collection is empty
 2. GET Product using incorrect product ID
 3. GET Product whose prize range product is not present in DB
