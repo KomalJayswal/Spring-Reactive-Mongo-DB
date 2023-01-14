@@ -1,6 +1,7 @@
 package net.learning.springreactivemongocurdpoc.mapper;
 
-import net.learning.springreactivemongocurdpoc.dto.Product;
+import net.learning.springreactivemongocurdpoc.dto.ProductRequest;
+import net.learning.springreactivemongocurdpoc.dto.ProductResponse;
 import net.learning.springreactivemongocurdpoc.entity.ProductEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,34 +16,43 @@ public class ProductMapper {
      * @param request PrpoductRequest json.
      * @return Single object of product which is saved.
      */
-    public static Mono<ProductEntity> mapToProductEntity(Product request, String productId) {
+    public static Mono<ProductEntity> mapToProductEntity(ProductRequest request, String productId) {
         return Mono.just(
                 ProductEntity.builder()
                         .id(productId)
-                        .qty(request.getQty())
+                        .qty(request.getQuantity())
                         .name(request.getName())
                         .price(request.getPrice())
                         .build());
     }
 
-    public static Mono<Product> mapToProduct(ProductEntity entity) {
+    public static Mono<ProductResponse> mapToProductResponse(ProductEntity entity) {
         return Mono.just(
-                Product.builder()
-                        .id(entity.getId())
-                        .qty(entity.getQty())
+                ProductResponse.builder()
+                        .productId(entity.getId())
+                        .quantity(entity.getQty())
                         .name(entity.getName())
                         .price(entity.getPrice())
                         .build());
     }
 
-    public static Flux<Product> mapToAllProduct(ProductEntity entity) {
+    public static Flux<ProductResponse> mapToAllProductEntity(ProductEntity entity) {
         return Flux.just(
-                Product.builder()
-                        .id(entity.getId())
-                        .qty(entity.getQty())
+                ProductResponse.builder()
+                        .productId(entity.getId())
+                        .quantity(entity.getQty())
                         .name(entity.getName())
                         .price(entity.getPrice())
                         .build());
     }
 
+    public static Mono<ProductEntity> mapUpdateProductEntity(ProductRequest updateRequest, ProductEntity entity) {
+        return Mono.just(
+                ProductEntity.builder()
+                        .id(entity.getId())
+                        .qty(updateRequest.getQuantity())
+                        .name(updateRequest.getName())
+                        .price(updateRequest.getPrice())
+                        .build());
+    }
 }

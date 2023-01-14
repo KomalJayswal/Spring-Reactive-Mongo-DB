@@ -1,6 +1,8 @@
 package net.learning.springreactivemongocurdpoc.controller;
 
-import net.learning.springreactivemongocurdpoc.dto.Product;
+import net.learning.springreactivemongocurdpoc.dto.ProductRequest;
+import net.learning.springreactivemongocurdpoc.dto.ProductResponse;
+import net.learning.springreactivemongocurdpoc.mapper.ProductMapper;
 import net.learning.springreactivemongocurdpoc.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-class ProductControllerTest {
+class ProductResponseControllerTest {
     private WebTestClient webTestClient;
 
     @InjectMocks
@@ -37,13 +39,14 @@ class ProductControllerTest {
     @Test
     public void addProductTest(){
 
-        Product product = new Product("102","mobile",1,10000);
-        when(productService.saveProduct(product)).thenReturn(Mono.just(product));
+        ProductRequest productRequest = new ProductRequest("mobile",1,10000);
+        ProductResponse productResponse = new ProductResponse("101","mobile",1,10000);
+        when(productService.saveProduct(productRequest)).thenReturn(Mono.just(productResponse));
 
         webTestClient
                 .post()
                 .uri("/products")
-                .body(Mono.just(product), Product.class)
+                .body(Mono.just(productResponse), ProductResponse.class)
                 .exchange()
                 .expectStatus()
                 .isCreated();
@@ -52,33 +55,33 @@ class ProductControllerTest {
 
     @Test
     public void getProductsTest(){
-        Flux<Product> DtoFlux=Flux.just(new Product("102","mobile",1,10000),
-                new Product("103","TV",1,50000));
+        Flux<ProductResponse> DtoFlux=Flux.just(new ProductResponse("102","mobile",1,10000),
+                new ProductResponse("103","TV",1,50000));
         when(productService.getProducts()).thenReturn(DtoFlux);
 
-        Flux<Product> responseBody = webTestClient.get().uri("/products")
+        Flux<ProductResponse> responseBody = webTestClient.get().uri("/products")
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(Product.class)
+                .returnResult(ProductResponse.class)
                 .getResponseBody();
 
         StepVerifier.create(responseBody)
                 .expectSubscription()
-                .expectNext(new Product("102","mobile",1,10000))
-                .expectNext(new Product("103","TV",1,50000))
+                .expectNext(new ProductResponse("102","mobile",1,10000))
+                .expectNext(new ProductResponse("103","TV",1,50000))
                 .verifyComplete();
     }
 
 
     @Test
     public void getProductTest(){
-        Mono<Product> DtoMono=Mono.just(new Product("102","mobile",1,10000));
-        when(productService.retriveProduct(any())).thenReturn(DtoMono);
+        Mono<ProductResponse> productResponse=Mono.just(new ProductResponse("102","mobile",1,10000));
+        when(productService.retriveProduct(any())).thenReturn(productResponse);
 
-        Flux<Product> responseBody = webTestClient.get().uri("/products/102")
+        Flux<ProductResponse> responseBody = webTestClient.get().uri("/products/102")
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(Product.class)
+                .returnResult(ProductResponse.class)
                 .getResponseBody();
 
         StepVerifier.create(responseBody)
@@ -90,21 +93,24 @@ class ProductControllerTest {
 
     @Test
     public void updateProductTest(){
-        Mono<Product> productMono = Mono.just(new Product("102","mobile",1,10000));
-        when(productService.updateProduct("102")).thenReturn(productMono);
+        ProductRequest productRequest = new ProductRequest("mobile",1,10000);
 
-        webTestClient.put().uri("/products/update/102")
-                .body(Mono.just(productMono), Product.class)
+        Mono<ProductResponse> productMono = Mono.just(new ProductResponse("102","mobile",1,10000));
+        when(productService.updateProduct(productRequest,"102")).thenReturn(productMono);
+
+        webTestClient.put().uri("/products/102")
+                .body(Mono.just(productMono), ProductResponse.class)
                 .exchange()
                 .expectStatus().isOk();//200
     }
 
     @Test
     public void deleteProductTest(){
-        given(productService.deleteProduct(any())).willReturn(Mono.empty());
-        webTestClient.delete().uri("/products/delete/102")
+        given(productService.deleteProduct(any())).willReturn(Mono.just("Product is Deleted successfully !"));
+        webTestClient.delete().uri("/products/102")
                 .exchange()
-                .expectStatus().isOk();//200
+                .expectStatus()
+                .isOk();
     }
 
 }

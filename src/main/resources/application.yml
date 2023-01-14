@@ -8,4 +8,4 @@ spring:
       server-selection-timeout: ${MONGO_DB_SERVER_SELECTION_TIMEOUT}
 
 server:
-  port: 9292
+  port: 8080

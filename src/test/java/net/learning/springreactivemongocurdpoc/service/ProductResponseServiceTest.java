@@ -1,6 +1,6 @@
 package net.learning.springreactivemongocurdpoc.service;
 
-import net.learning.springreactivemongocurdpoc.dto.Product;
+import net.learning.springreactivemongocurdpoc.dto.ProductResponse;
 import net.learning.springreactivemongocurdpoc.entity.ProductEntity;
 import net.learning.springreactivemongocurdpoc.exceptions.ProductException;
 import net.learning.springreactivemongocurdpoc.repository.ProductRepository;
@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-public class ProductServiceTest {
+public class ProductResponseServiceTest {
 
     @InjectMocks
     private ProductService productService;
@@ -28,7 +28,7 @@ public class ProductServiceTest {
     @Test
     void getProductErrorTest() {
         Mockito.when(productRepository.findById("test_id")).thenReturn(Mono.empty());
-        Mono<Product> bookingDomainMono = productService.retriveProduct("test_id");
+        Mono<ProductResponse> bookingDomainMono = productService.retriveProduct("test_id");
         StepVerifier.create(bookingDomainMono).expectError(ProductException.class).verify();
     }
 
@@ -39,10 +39,10 @@ public class ProductServiceTest {
         Mono<ProductEntity> product = Mono.just(new ProductEntity("test_id","mobile",1,10000));
 
         Mockito.when(productRepository.findById("test_id")).thenReturn(product);
-        Mono<Product> bookingResponse = productService.retriveProduct(productId);
+        Mono<ProductResponse> bookingResponse = productService.retriveProduct(productId);
         StepVerifier.create(bookingResponse)
                 .expectSubscription()
-                .assertNext(e -> Assertions.assertEquals(productId, e.getId()))
+                .assertNext(e -> Assertions.assertEquals(productId, e.getProductId()))
                 .verifyComplete();
     }
 }
