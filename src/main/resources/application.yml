@@ -1,11 +1,11 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: test_database
-      username: test_user
-      password: test_password
+      database: ${MONGO_DB_NAME}
+      uri: mongodb://${MONGO_DB_USER_NAME}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}:${MONGO_DB_PORT}/?authMechanism=SCRAM-SHA-1&authSource=${MONGO_DB_NAME}
+      read-timeout: ${MONGO_DB_READ_TIMEOUT}
+      connection-timeout: ${MONGO_DB_CONNECTION_TIMEOUT}
+      server-selection-timeout: ${MONGO_DB_SERVER_SELECTION_TIMEOUT}
 
 server:
   port: 9292
