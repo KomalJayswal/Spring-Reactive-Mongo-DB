@@ -9,14 +9,14 @@
 * Cut a branch from feature/Curd
 * Remove _class productEntity from DB by adding config code
 
-### feature/
+### feature/modify_mongoDb_timeout
 
-* Cut a branch from feature/
+* Cut a branch from feature/Remove_underscore_class
 * Modify default mongodb timeout from 60 secs to 10 secs
 
 ### feature/add_exception_handling
 
-* Cut a branch from feature/
+* Cut a branch from feature/modify_mongoDb_timeout
 * Add Exception Handling
   * Error Cases :-
     1. GET All Product when collection is empty
@@ -29,12 +29,12 @@
 
 ### feature/add_ID_Generator
 
-* Cut a branch from feature/
+* Cut a branch from feature/add_exception_handling
 * Add an ID generator
 
 ### feature/add_kafka_consumer
 
-* Cut a branch from feature/
+* Cut a branch from feature/add_ID_Generator
 * Add Kafka Consumer 
 
 
